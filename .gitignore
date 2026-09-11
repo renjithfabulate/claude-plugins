@@ -1,5 +1,14 @@
 .DS_Store
 node_modules/
 *.log
+
+# Credentials must never be committed. The Linear API key belongs in
+# ~/.config/rpi/linear.env (outside any repo), the plugin userConfig prompt,
+# or a LINEAR_API_KEY environment variable.
 .env
 .env.*
+*.env
+.config/
+secrets/
+*.pem
+*.key

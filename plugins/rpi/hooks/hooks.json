@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-secrets.mjs\"",
+            "timeout": 15,
+            "statusMessage": "Scanning write for credentials"
+          }
+        ]
+      }
+    ]
+  }
+}

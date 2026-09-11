@@ -4,13 +4,13 @@
 //
 // Every mutating command is a dry run unless you pass --apply.
 //
-//   node linear.mjs list           --team HLSB
-//   node linear.mjs ensure         --team HLSB [--file stages.json] [--apply]
-//   node linear.mjs rename         --team HLSB --from old --to new [--apply]
-//   node linear.mjs update         --team HLSB --name n [--color #RRGGBB] [--description d] [--position 3] [--apply]
-//   node linear.mjs archive        --team HLSB --name n [--move-to other] [--apply]
-//   node linear.mjs archive-others --team HLSB [--move-to other] [--apply]
-//   node linear.mjs destroy        --team HLSB [--move-to other] [--apply]
+//   node linear.mjs list           --team ENG
+//   node linear.mjs ensure         --team ENG [--file stages.json] [--apply]
+//   node linear.mjs rename         --team ENG --from old --to new [--apply]
+//   node linear.mjs update         --team ENG --name n [--color #RRGGBB] [--description d] [--position 3] [--apply]
+//   node linear.mjs archive        --team ENG --name n [--move-to other] [--apply]
+//   node linear.mjs archive-others --team ENG [--move-to other] [--apply]
+//   node linear.mjs destroy        --team ENG [--move-to other] [--apply]
 
 import { readFileSync, existsSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -80,13 +80,13 @@ async function gql(query, variables = {}) {
 // ---------- domain ----------
 
 async function resolveTeam(ref) {
-  if (!ref) fail('Missing --team. Pass the team key (e.g. HLSB) or its full name.');
+  if (!ref) fail('Missing --team. Pass the team key (e.g. ENG) or its full name.');
   const data = await gql(
     `query($q:String!){ teams(filter:{ or:[{key:{eqIgnoreCase:$q}},{name:{eqIgnoreCase:$q}}] }, first:2){ nodes{ id key name } } }`,
     { q: ref }
   );
   const nodes = data.teams.nodes;
-  if (!nodes.length) fail(`No Linear team matches "${ref}". Use the team key (e.g. HLSB) or its exact name.`);
+  if (!nodes.length) fail(`No Linear team matches "${ref}". Use the team key (e.g. ENG) or its exact name.`);
   if (nodes.length > 1) fail(`"${ref}" matches more than one team: ${nodes.map((n) => n.key).join(', ')}. Use the key.`);
   return nodes[0];
 }

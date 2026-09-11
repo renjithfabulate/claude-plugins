@@ -26,7 +26,7 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/linear.mjs archive-others --team <KEY> [--mov
 node ${CLAUDE_PLUGIN_ROOT}/scripts/linear.mjs destroy        --team <KEY> [--move-to <state>]
 ```
 
-`--team` accepts a team key (`HLSB`) or its full name. If the user did not name a team, read
+`--team` accepts a team key (`ENG`) or its full name. If the user did not name a team, read
 `.rpi/config.json` in the working repo for `linearTeam`, and ask if that is absent too.
 
 ## How to run it

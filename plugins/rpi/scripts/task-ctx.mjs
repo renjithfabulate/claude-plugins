@@ -135,7 +135,7 @@ row('linear team', ctx.linearTeam || '(not set, ask the user or pass explicitly)
 row('config', rel(ctx.configSource) || '(none, using defaults)');
 row('task dir', rel(taskDir) + (ctx.taskDirExists ? '' : '  (does not exist yet)'));
 row('ticket.md', ctx.ticketFile ? 'present' : 'missing');
-row('worktree', ctx.worktree?.enabled ? `enabled -> ${ctx.worktree.path || '../worktrees'}` : 'not configured');
+row('worktree', !ctx.worktree ? 'not configured' : ctx.worktree.enabled ? `enabled -> ${ctx.worktree.path || '../worktrees'}` : 'configured but disabled');
 
 console.log(`\nartifacts (${artifacts.length})`);
 if (!artifacts.length) console.log('  (none yet)');

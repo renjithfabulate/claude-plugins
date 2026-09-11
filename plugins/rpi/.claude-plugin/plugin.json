@@ -1,0 +1,21 @@
+{
+  "name": "rpi",
+  "displayName": "RPI",
+  "version": "0.1.0",
+  "description": "Research-Plan-Implement: spec-driven development with human review checkpoints at every phase, and automatic Linear issue status sync.",
+  "author": {
+    "name": "renjithfabulate",
+    "url": "https://github.com/renjithfabulate"
+  },
+  "repository": "https://github.com/renjithfabulate/claude-plugins",
+  "license": "MIT",
+  "keywords": ["workflow", "spec-driven", "planning", "linear", "rpi", "review"],
+  "userConfig": {
+    "linear_api_key": {
+      "type": "string",
+      "title": "Linear API key (optional)",
+      "description": "Only needed for /rpi:stages, which creates, renames or archives Linear workflow states. Generate one at Settings > Security & access > Personal API keys. Every other command reaches Linear over OAuth through the bundled MCP server and needs no key. Leave blank if you are not provisioning workflow states.",
+      "sensitive": true
+    }
+  }
+}

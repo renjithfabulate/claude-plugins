@@ -23,6 +23,14 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs <TICKET-ID>
 
 Note the branch and base branch.
 
+## 1b. Refuse if head and base are the same
+
+If the current branch equals the base branch, **stop**. There is no diff to describe and a pull
+request cannot go from a branch into itself.
+
+Say which branch the work is on, and that it needs moving to a working branch before a PR exists.
+Do not attempt `gh pr create` to find out.
+
 ## 2. Settle outstanding work
 
 ```bash

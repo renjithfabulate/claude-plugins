@@ -27,6 +27,23 @@ If it reports the task directory already exists with artifacts in it, stop and t
 probably want to continue the existing task rather than restart it, and the right move is the next
 phase command, not this one.
 
+## 1b. Check you are not on the base branch
+
+If `task-ctx.mjs` reports **branch** and **base branch** as the same, stop and say so before writing
+anything. Task artifacts and the implementation that follows belong on a working branch: starting on
+base means the artifacts land on your trunk, and `/rpi:describe-pr` later computes an empty diff and
+tries to open a pull request from a branch into itself.
+
+Offer to create one. Linear supplies a branch name on the issue (`gitBranchName`), which is the best
+choice because it lets Linear link the branch to the ticket automatically:
+
+```bash
+git checkout -b <gitBranchName from the issue>
+```
+
+Wait for the user to agree before creating it. If they say they want to work on base deliberately,
+note it and continue.
+
 ## 2. Fetch the issue from Linear
 
 Use the Linear MCP `get_issue` tool with the ticket identifier, then `list_comments` for its

@@ -12,6 +12,10 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Gr
 
 Ticket: `$ARGUMENTS`
 
+If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+directory and moving the wrong Linear issue, which is worse than failing outright.
+
 ## When to use this
 
 Most tasks do not need it. `/rpi:implement-outline` works straight from the outline, and an extra

@@ -85,6 +85,7 @@ const flag = (name) => {
 
 if (!ticket) {
   console.error('usage: task-ctx.mjs <TICKET-ID> [--repo <path>] [--json]');
+  console.error('No ticket given. Ask the user which ticket; do not infer one from the branch name.');
   process.exit(1);
 }
 

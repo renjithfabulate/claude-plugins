@@ -10,6 +10,10 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(gh 
 
 Ticket: `$ARGUMENTS`
 
+If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+directory and moving the wrong Linear issue, which is worse than failing outright.
+
 Feedback on an RPI task arrives in two places: comments on the Linear issue, and review comments on
 the pull request.
 

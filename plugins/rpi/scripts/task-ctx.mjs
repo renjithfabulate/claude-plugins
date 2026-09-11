@@ -24,7 +24,7 @@ const KINDS = [
 // Later beats earlier when artifacts disagree.
 const PRECEDENCE = ['research', 'design-discussion', 'prd', 'tdd', 'structure-outline', 'plan'];
 
-const DEFAULTS = { artifactDir: 'thoughts', linearTeam: null, baseBranch: null };
+const DEFAULTS = { artifactDir: 'thoughts', linearTeam: null, baseBranch: null, worktree: null };
 
 function git(args, cwd) {
   try {
@@ -109,6 +109,7 @@ const ctx = {
   linearTeam: cfg.linearTeam,
   configSource: cfg._source,
   artifactDir: cfg.artifactDir,
+  worktree: cfg.worktree,
   taskDir,
   taskDirExists: existsSync(taskDir),
   ticketFile: existsSync(join(taskDir, 'ticket.md')) ? join(taskDir, 'ticket.md') : null,
@@ -134,6 +135,7 @@ row('linear team', ctx.linearTeam || '(not set, ask the user or pass explicitly)
 row('config', rel(ctx.configSource) || '(none, using defaults)');
 row('task dir', rel(taskDir) + (ctx.taskDirExists ? '' : '  (does not exist yet)'));
 row('ticket.md', ctx.ticketFile ? 'present' : 'missing');
+row('worktree', ctx.worktree?.enabled ? `enabled -> ${ctx.worktree.path || '../worktrees'}` : 'not configured');
 
 console.log(`\nartifacts (${artifacts.length})`);
 if (!artifacts.length) console.log('  (none yet)');

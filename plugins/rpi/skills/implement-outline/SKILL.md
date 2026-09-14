@@ -64,7 +64,7 @@ easier one is worse than no check, because the tick in the Overview then means n
 Commit this phase on its own:
 
 ```
-<ticket-id>: phase <n> — <phase name>
+<ticket-id>: phase <n>, <phase name>
 ```
 
 Tick the phase's box in the outline's Overview and commit that alongside. Progress lives in the

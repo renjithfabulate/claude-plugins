@@ -80,11 +80,11 @@ What should be true when this is done, in behavioural terms.
 
 ### 1. <the choice, as a question>
 **Options**
-- **A — <name>.** <what it means, what it costs>
-- **B — <name>.** <what it means, what it costs>
+- **A. <name>:** <what it means, what it costs>
+- **B. <name>:** <what it means, what it costs>
 
 **Recommendation:** <which, and why, in one line>
-**Status:** Decided — B, because <the user's reason> | **Open**
+**Status:** Decided, B, because <the user's reason> | **Open**
 
 ### 2. ...
 

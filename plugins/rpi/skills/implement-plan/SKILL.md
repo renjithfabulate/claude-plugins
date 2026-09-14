@@ -59,7 +59,7 @@ Exactly as written. Fix and re-run on failure. Stop and explain on an unanticipa
 ## 6. Commit
 
 ```
-<ticket-id>: phase <n> — <phase name>
+<ticket-id>: phase <n>, <phase name>
 ```
 
 Tick the phase in the outline's Overview if one exists, and commit that too.

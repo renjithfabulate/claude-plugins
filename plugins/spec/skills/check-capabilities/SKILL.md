@@ -63,6 +63,13 @@ Then stop and let the user decide what to close. Do not start fetching or writin
 skill covering the topic. An installed, maintained skill beats one you author from a docs page, every
 time. Only author when nothing exists.
 
+**If several skills could fit, ask which one.** Present them with what each covers and who maintains
+it, and let the user choose. Installing a skill adds instructions that every future session in this
+repo will follow, so which one it is matters. Do not pick the first plausible match.
+
+Authoring is the last resort, and it is also a choice to put to the user: offer it rather than
+starting.
+
 ### If you author one
 
 This is the part with a real security property, so follow it exactly.
@@ -104,12 +111,48 @@ Layout, in the **project** repo so teammates get it too:
 
 You cannot install or authorise an MCP server, and you must not try.
 
-Name the server, say what it would provide, and tell the user to run `/mcp` in an interactive session
-to connect it. If it needs a key, point at where to get one and stop. **Never ask the user to paste a
-token, key or authorisation code into the conversation.**
+**You also do not choose which one.** Connecting a server grants a third party live access to the
+user's data, under their account. There is nearly always more than one candidate, and the right
+answer depends on what they already pay for, what their org permits, and what they are willing to
+expose. None of that is visible to you. Present options, let them pick.
 
-If the work genuinely cannot proceed without it, say so plainly rather than building a workaround
-that silently does less.
+### Prefer what is already connected
+
+Read the inventory again before proposing anything new. If a **connected** server already covers the
+need, offer that first and say so. It needs no new grant, no new vendor and no new decision.
+
+A server listed as **needs authentication** is a middle case: it is already installed, so the choice
+was made once before; it just needs `/mcp`. Say that rather than treating it as absent.
+
+### If nothing connected covers it
+
+Use `AskUserQuestion`. For each candidate give:
+
+- what it would let the workflow do that it cannot do now
+- **what data it would get access to**, stated plainly
+- whether it needs a key, an OAuth grant, or an org admin
+
+Always include an option meaning **"none of these, do it without an MCP"**, and say what the work
+loses if they take it. A user declining to connect a vendor is a legitimate answer, not an obstacle
+to route around.
+
+If the session offers MCP registry tools, use them to find real candidates rather than recalling
+names from memory: a server you half-remember may not exist, may be abandoned, or may not be the
+official one.
+
+### Never
+
+- Never pick a server and start using it because it looked like the obvious fit.
+- Never ask the user to paste a token, key, client secret or authorisation code into the
+  conversation. The `/mcp` flow and the plugin's own config prompt exist for that.
+- Never suggest an unofficial or community server without saying that is what it is.
+- Never quietly build a workaround that does less. If the work genuinely needs the server, say so and
+  stop.
+
+### After they choose
+
+Tell them the exact step: run `/mcp` in an interactive session and connect it. Then stop. The
+capability is unavailable until they have done it, so do not plan phases that assume otherwise.
 
 ## 6. Hand off
 

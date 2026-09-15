@@ -6,7 +6,7 @@
 # is a no-op while the version in plugin.json is unchanged. So during development,
 # reinstall is the way to pick up edits.
 set -euo pipefail
-PLUGIN="${1:-rpi@rvs-plugins}"
+PLUGIN="${1:-spec@rvs-plugins}"
 claude plugin uninstall "$PLUGIN" >/dev/null 2>&1 || true
 claude plugin install "$PLUGIN"
 echo

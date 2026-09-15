@@ -16,7 +16,7 @@ only place a wrong direction gets caught cheaply.
 
 ```bash
 /plugin marketplace add renjithfabulate/claude-plugins
-/plugin install rpi@rvs-plugins
+/plugin install spec@rvs-plugins
 ```
 
 Or pin it in a repo's `.claude/settings.json` so it registers for anyone who trusts that repo:
@@ -26,7 +26,7 @@ Or pin it in a repo's `.claude/settings.json` so it registers for anyone who tru
   "extraKnownMarketplaces": {
     "rvs-plugins": { "source": { "source": "github", "repo": "renjithfabulate/claude-plugins" } }
   },
-  "enabledPlugins": { "rpi@rvs-plugins": true }
+  "enabledPlugins": { "spec@rvs-plugins": true }
 }
 ```
 
@@ -47,9 +47,9 @@ Start here:
 
 | Command | Does |
 |---|---|
-| `/rpi:start-task` | Pull a Linear ticket into a task directory and choose the workflow |
-| `/rpi:stages` | Inspect and manage the RPI workflow states on a Linear team |
-| `/rpi:configure-workspace` | Write the per-repo `.rpi/config.json` |
+| `/spec:start-task` | Pull a Linear ticket into a task directory and choose the workflow |
+| `/spec:stages` | Inspect and manage the RPI workflow states on a Linear team |
+| `/spec:configure-workspace` | Write the per-repo `.spec/config.json` |
 
 Phase commands, each with an `iterate` sibling that edits the artifact in place:
 
@@ -116,14 +116,14 @@ Issue status transitions run over OAuth through the bundled Linear MCP server. A
 | PR opened | `code-review` | `code-review` |
 
 Forward handoffs to the `ready-for-*` states stay manual, and nothing here ever moves an issue to
-Done. Run `/rpi:stages ensure <TEAM>` to create the 18 states on a team.
+Done. Run `/spec:stages ensure <TEAM>` to create the 18 states on a team.
 
-A Linear API key is needed **only** by `/rpi:stages`, because Linear's MCP is read-only for workflow
+A Linear API key is needed **only** by `/spec:stages`, because Linear's MCP is read-only for workflow
 states. Claude Code prompts for it at install and stores it per user. It is never committed.
 
 ### Per-repo configuration
 
-The plugin ships no project-specific values. Put those in `.rpi/config.json` in each repo:
+The plugin ships no project-specific values. Put those in `.spec/config.json` in each repo:
 
 ```json
 {
@@ -151,7 +151,7 @@ All fields optional. Commit it: it holds no secrets.
 ## Development
 
 Plugins install as a copy, and `claude plugin update` only acts when the version in `plugin.json`
-changes. After editing anything under `plugins/rpi/`:
+changes. After editing anything under `plugins/spec/`:
 
 ```bash
 ./dev-sync.sh
@@ -160,7 +160,7 @@ changes. After editing anything under `plugins/rpi/`:
 Validate before committing:
 
 ```bash
-claude plugin validate . && claude plugin validate ./plugins/rpi
+claude plugin validate . && claude plugin validate ./plugins/spec
 ```
 
 Skills, hooks and MCP servers are read at session start, so restart Claude Code after a sync.

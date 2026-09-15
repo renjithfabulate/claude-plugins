@@ -7,9 +7,9 @@
   "description": "Spec-driven development tooling for Claude Code. Phase-gated workflows with human review checkpoints and issue-tracker status sync.",
   "plugins": [
     {
-      "name": "rpi",
-      "source": "./plugins/rpi",
-      "displayName": "RPI",
+      "name": "spec",
+      "source": "./plugins/spec",
+      "displayName": "Spec",
       "description": "Research-Plan-Implement: spec-driven development with human review checkpoints at every phase, and automatic Linear issue status sync.",
       "version": "0.1.0",
       "license": "MIT",

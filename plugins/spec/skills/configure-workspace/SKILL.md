@@ -32,7 +32,7 @@ Ask about anything you cannot determine. Use `AskUserQuestion` where there is a 
 | Field | Meaning | Default |
 |---|---|---|
 | `linearTeam` | Team key for status sync, e.g. `ENG` | none, must be set for Linear sync |
-| `artifactDir` | Where task artifacts live | `thoughts` |
+| `artifactDir` | Where task artifacts live | `.thoughts` |
 | `baseBranch` | Branch PRs target | detected from `origin/HEAD` |
 | `worktree.enabled` | Whether tasks get their own worktree | `false` |
 | `worktree.path` | Where worktrees are created | `../worktrees` |
@@ -49,7 +49,7 @@ Print the complete proposed JSON and get approval. Then write it.
 ```json
 {
   "linearTeam": "ENG",
-  "artifactDir": "thoughts",
+  "artifactDir": ".thoughts",
   "baseBranch": "main",
   "worktree": {
     "enabled": true,

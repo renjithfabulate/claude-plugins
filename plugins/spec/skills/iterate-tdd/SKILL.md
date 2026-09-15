@@ -1,7 +1,7 @@
 ---
 name: iterate-tdd
 description: Apply technical feedback to an existing TDD while keeping system design and program design in step. Edits in place, resolving one technical choice at a time.
-argument-hint: [TICKET-ID] [feedback]
+argument-hint: [TASK-ID] [feedback]
 disable-model-invocation: true
 disallowed-tools: NotebookEdit
 effort: high
@@ -12,9 +12,19 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *),
 
 Arguments: `$ARGUMENTS`
 
-If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
-the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+If no task identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another task's
 directory and moving the wrong Linear issue, which is worse than failing outright.
+
+The identifier is one of two things:
+
+- a **Linear ticket**, an uppercase key then a hyphen then digits (`ENG-123`)
+- a **local task slug** for work with no ticket at all (`fix-login-redirect`)
+
+`task-ctx.mjs` reports which as **task type**. When it says *local task*, **skip every Linear step
+in this command**: no status transitions, no comment sync, no `save_issue`. Everything else, the
+artifacts, the checkpoints and the handoffs, is identical. A missing ticket is a normal way to work,
+not an error.
 
 ## 1. Context
 

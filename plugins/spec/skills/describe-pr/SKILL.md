@@ -1,7 +1,7 @@
 ---
 name: describe-pr
 description: Open or update the branch's pull request. Reads the whole diff against base, checks it against the task artifacts, and writes the PR body. The last command in an RPI task.
-argument-hint: [TICKET-ID]
+argument-hint: [TASK-ID]
 disable-model-invocation: true
 effort: high
 allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(git *), Bash(gh *), Read, Grep, Glob, Write, AskUserQuestion
@@ -11,9 +11,19 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *),
 
 Ticket: `$ARGUMENTS`
 
-If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
-the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+If no task identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another task's
 directory and moving the wrong Linear issue, which is worse than failing outright.
+
+The identifier is one of two things:
+
+- a **Linear ticket**, an uppercase key then a hyphen then digits (`ENG-123`)
+- a **local task slug** for work with no ticket at all (`fix-login-redirect`)
+
+`task-ctx.mjs` reports which as **task type**. When it says *local task*, **skip every Linear step
+in this command**: no status transitions, no comment sync, no `save_issue`. Everything else, the
+artifacts, the checkpoints and the handoffs, is identical. A missing ticket is a normal way to work,
+not an error.
 
 ## 1. Context
 
@@ -94,9 +104,9 @@ What was run, and what it printed.
 Migrations, env vars, feature flags. "None" if none.
 
 ## Artifacts
-- [Research](thoughts/<TICKET>/NN-research-<slug>.md)
-- [Design](thoughts/<TICKET>/NN-design-discussion-<slug>.md)
-- [Outline](thoughts/<TICKET>/NN-structure-outline-<slug>.md)
+- [Research](.thoughts/<TASK-ID>/NN-research-<slug>.md)
+- [Design](.thoughts/<TASK-ID>/NN-design-discussion-<slug>.md)
+- [Outline](.thoughts/<TASK-ID>/NN-structure-outline-<slug>.md)
 
 Closes <TICKET-ID>
 ```

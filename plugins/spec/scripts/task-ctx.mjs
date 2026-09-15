@@ -24,7 +24,19 @@ const KINDS = [
 // Later beats earlier when artifacts disagree.
 const PRECEDENCE = ['research', 'design-discussion', 'prd', 'tdd', 'structure-outline', 'plan'];
 
-const DEFAULTS = { artifactDir: 'thoughts', linearTeam: null, baseBranch: null, worktree: null };
+// A Linear identifier is an uppercase team key, a hyphen, then digits (HLSB-3).
+// Anything else is a local task slug and no Linear call is made for it.
+const LINEAR_ID = /^[A-Z][A-Z0-9]{0,9}-\d+$/;
+
+const DEFAULTS = { artifactDir: null, linearTeam: null, baseBranch: null, worktree: null };
+
+// '.thoughts' is the default for new repos. A repo that already has a legacy
+// 'thoughts' directory keeps using it, so an existing task is never orphaned.
+function defaultArtifactDir(root) {
+  if (existsSync(join(root, '.thoughts'))) return '.thoughts';
+  if (existsSync(join(root, 'thoughts'))) return 'thoughts';
+  return '.thoughts';
+}
 
 // Keep every derived path inside the repo. The ticket id is user input and artifactDir
 // comes from a committed config file, so either could otherwise redirect writes outside
@@ -111,12 +123,13 @@ if (!ticket) {
 }
 
 if (ticket.includes('/') || ticket.includes('\\') || ticket.split(/[\\/]/).includes('..') || ticket === '..') {
-  console.error(`error: "${ticket}" is not a valid ticket id. It must not contain path separators or "..".`);
+  console.error(`error: "${ticket}" is not a valid task id. It must not contain path separators or "..".`);
   process.exit(1);
 }
 
 const root = repoRoot(flag('repo') || process.cwd());
 const cfg = loadConfig(root);
+if (!cfg.artifactDir) cfg.artifactDir = defaultArtifactDir(root);
 const taskDir = contain(root, cfg.artifactDir, ticket);
 const artifacts = scan(taskDir);
 const nextNum = String((artifacts.at(-1)?.num ?? 0) + 1).padStart(2, '0');
@@ -130,6 +143,7 @@ const authoritative = [...PRECEDENCE].reverse().map((k) => latest[k]).find(Boole
 
 const ctx = {
   ticket,
+  isLinearTicket: LINEAR_ID.test(ticket),
   repoRoot: root,
   branch: git(['rev-parse', '--abbrev-ref', 'HEAD'], root),
   baseBranch: cfg.baseBranch || detectBaseBranch(root),
@@ -158,7 +172,8 @@ console.log(`RPI task context: ${ticket}\n`);
 row('repo', root);
 row('branch', ctx.branch);
 row('base branch', ctx.baseBranch);
-row('linear team', ctx.linearTeam || '(not set, ask the user or pass explicitly)');
+row('task type', ctx.isLinearTicket ? 'Linear ticket, status sync ON' : 'local task, no Linear calls');
+if (ctx.isLinearTicket) row('linear team', ctx.linearTeam || '(not set, ask the user or pass explicitly)');
 row('config', rel(ctx.configSource) || '(none, using defaults)');
 row('task dir', rel(taskDir) + (ctx.taskDirExists ? '' : '  (does not exist yet)'));
 row('ticket.md', ctx.ticketFile ? 'present' : 'missing');

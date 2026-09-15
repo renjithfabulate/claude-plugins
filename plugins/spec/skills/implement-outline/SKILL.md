@@ -1,7 +1,7 @@
 ---
 name: implement-outline
 description: Implement an RPI task straight from its structure outline, one phase at a time, running the phase checks and committing before moving on. Pauses for review after each phase.
-argument-hint: [TICKET-ID] [phase number]
+argument-hint: [TASK-ID] [phase number]
 disable-model-invocation: true
 effort: high
 allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash, Read, Grep, Glob, Edit, Write, Task, AskUserQuestion
@@ -11,9 +11,19 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash, Re
 
 Arguments: `$ARGUMENTS`
 
-If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
-the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+If no task identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another task's
 directory and moving the wrong Linear issue, which is worse than failing outright.
+
+The identifier is one of two things:
+
+- a **Linear ticket**, an uppercase key then a hyphen then digits (`ENG-123`)
+- a **local task slug** for work with no ticket at all (`fix-login-redirect`)
+
+`task-ctx.mjs` reports which as **task type**. When it says *local task*, **skip every Linear step
+in this command**: no status transitions, no comment sync, no `save_issue`. Everything else, the
+artifacts, the checkpoints and the handoffs, is identical. A missing ticket is a normal way to work,
+not an error.
 
 ## 1. Context
 

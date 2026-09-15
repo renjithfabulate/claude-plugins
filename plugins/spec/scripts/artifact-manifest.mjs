@@ -60,7 +60,7 @@ if (/[\\/]/.test(ticket) || ticket.split(/[\\/]/).includes('..')) {
 
 const root = git(['rev-parse', '--show-toplevel'], repoFlag || process.cwd()) || resolve(repoFlag || process.cwd());
 
-let cfg = { artifactDir: 'thoughts' };
+let cfg = { artifactDir: null };
 for (const d of ['.spec', '.rpi']) {
   const p = contain(root, d, 'config.json');
   if (!existsSync(p)) continue;
@@ -68,6 +68,10 @@ for (const d of ['.spec', '.rpi']) {
   break;
 }
 
+if (!cfg.artifactDir) {
+  cfg.artifactDir = existsSync(join(root, '.thoughts')) ? '.thoughts'
+    : existsSync(join(root, 'thoughts')) ? 'thoughts' : '.thoughts';
+}
 const taskDir = contain(root, cfg.artifactDir, ticket);
 const relDir = taskDir.replace(root + sep, '');
 const branch = git(['rev-parse', '--abbrev-ref', 'HEAD'], root);

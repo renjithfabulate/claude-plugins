@@ -66,12 +66,26 @@ Phase commands, each with an `iterate` sibling that edits the artifact in place:
 
 Utilities: `describe-pr`, `ci-commit`, `create-worktree`, `review-artifact-comments`.
 
+### Working without a ticket
+
+A task id is either a **Linear ticket** (`ENG-123`: uppercase key, hyphen, digits) or a **local task
+slug** (`fix-login-redirect`) for work with no ticket behind it.
+
+```
+/spec:start-task fix-login-redirect
+/spec:create-research-plan fix-login-redirect
+```
+
+Local tasks skip every Linear call: no status transitions, no comment sync, no API key, no OAuth.
+Everything else, the artifacts, the checkpoints and the handoffs, is identical. `start-task` asks
+you for the description instead of fetching one.
+
 ### Artifacts
 
 Numbered Markdown in `<artifactDir>/<TICKET-ID>/`, committed alongside the code:
 
 ```
-thoughts/ENG-123/
+.thoughts/ENG-123/
   ticket.md
   01-research-questions-<slug>.md
   02-research-<slug>.md
@@ -133,7 +147,7 @@ The plugin ships no project-specific values. Put those in `.spec/config.json` in
 ```json
 {
   "linearTeam": "ENG",
-  "artifactDir": "thoughts",
+  "artifactDir": ".thoughts",
   "baseBranch": "main",
   "worktree": { "enabled": false, "path": "../worktrees", "setupCommands": [], "copyFiles": [] }
 }

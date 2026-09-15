@@ -1,7 +1,7 @@
 ---
 name: review-artifact-comments
 description: Review and act on feedback left on a task, from Linear issue comments and pull request review comments. Handles one comment at a time and routes each to the artifact that actually owns it.
-argument-hint: [TICKET-ID]
+argument-hint: [TASK-ID]
 disable-model-invocation: true
 allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(gh *), Bash(git *), Read, Grep, Glob, AskUserQuestion
 ---
@@ -10,9 +10,19 @@ allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(gh 
 
 Ticket: `$ARGUMENTS`
 
-If no ticket identifier was given, **ask for one and stop**. Do not infer it from the branch name,
-the directory, or earlier conversation. Guessing wrong means writing artifacts into another ticket's
+If no task identifier was given, **ask for one and stop**. Do not infer it from the branch name,
+the directory, or earlier conversation. Guessing wrong means writing artifacts into another task's
 directory and moving the wrong Linear issue, which is worse than failing outright.
+
+The identifier is one of two things:
+
+- a **Linear ticket**, an uppercase key then a hyphen then digits (`ENG-123`)
+- a **local task slug** for work with no ticket at all (`fix-login-redirect`)
+
+`task-ctx.mjs` reports which as **task type**. When it says *local task*, **skip every Linear step
+in this command**: no status transitions, no comment sync, no `save_issue`. Everything else, the
+artifacts, the checkpoints and the handoffs, is identical. A missing ticket is a normal way to work,
+not an error.
 
 Feedback on an RPI task arrives in two places: comments on the Linear issue, and review comments on
 the pull request.

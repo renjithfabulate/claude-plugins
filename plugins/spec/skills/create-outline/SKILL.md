@@ -5,7 +5,7 @@ argument-hint: [TASK-ID]
 disable-model-invocation: true
 disallowed-tools: Edit, NotebookEdit
 effort: high
-allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Write, Task
+allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/capabilities.mjs *), Read, Grep, Glob, Write, Task
 ---
 
 # Structure outline
@@ -67,6 +67,25 @@ Also:
 - **Keep them small.** A phase touching fifteen files is two or three phases.
 - **Name real files.** Paths from the codebase, not invented ones.
 - **Every phase states its checks.** The command that proves it: a test, a build, a curl, a query.
+
+## 3b. Check the phases are buildable here
+
+Once the phases are cut, look at what they actually require: libraries, CLIs, generators, external
+services. Then:
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/capabilities.mjs
+```
+
+If a phase depends on something this machine has no skill for, or on an MCP server that is not
+connected, **say so in the handoff** and point at `/spec:check-capabilities <TASK-ID>`.
+
+Do not fetch documentation or write a skill from here. That is deliberate: this command's job is the
+outline, and an agent that quietly goes and authors a skill mid-outline has both widened its remit
+and pulled untrusted web content into the repo without anyone deciding to.
+
+An MCP server showing **needs authentication** is not available. Treat it as missing, because only
+the user can authorise it.
 
 ## 4. Write the artifact
 

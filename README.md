@@ -116,7 +116,12 @@ Issue status transitions run over OAuth through the bundled Linear MCP server. A
 | PR opened | `code-review` | `code-review` |
 
 Forward handoffs to the `ready-for-*` states stay manual, and nothing here ever moves an issue to
-Done. Run `/spec:stages ensure <TEAM>` to create the 18 states on a team.
+Done.
+
+Every phase that writes an artifact also keeps **one comment** on the issue listing the current
+artifacts, updated in place rather than appended to. Once the branch is pushed the entries become
+links to the files on GitHub; before that they are repo-relative paths, since a link to an unpushed
+branch would only 404. Run `/spec:stages ensure <TEAM>` to create the 18 states on a team.
 
 A Linear API key is needed **only** by `/spec:stages`, because Linear's MCP is read-only for workflow
 states. Claude Code prompts for it at install and stores it per user. It is never committed.

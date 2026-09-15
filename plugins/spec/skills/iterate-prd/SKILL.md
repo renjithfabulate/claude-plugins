@@ -5,7 +5,7 @@ argument-hint: [TICKET-ID] [what to change]
 disable-model-invocation: true
 disallowed-tools: NotebookEdit
 effort: high
-allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Edit, Write, AskUserQuestion
+allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Edit, Write, AskUserQuestion
 ---
 
 # Revise the PRD
@@ -50,7 +50,28 @@ change belong in `/spec:iterate-tdd`.
 If a change is user-visible and the TDD already exists, say so plainly: the TDD will need revising
 too, and the user should know that before approving.
 
-## 5. Hand off
+## 5. Sync the artifact list to Linear
+
+Generate the comment body, do not compose it yourself:
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs <TICKET-ID>
+```
+
+Then post it as **one comment, kept current**:
+
+1. `list_comments` on the issue and find the comment whose body contains `<!-- spec:artifacts -->`.
+2. If it exists, call `save_comment` with that comment's `id` to replace its body.
+3. If not, call `save_comment` with `issueId` to create it.
+
+Never add a new comment per phase. A ticket that accumulates one comment per phase becomes
+unreadable, which is the opposite of the point: anyone opening the issue should see the current
+artifacts at a glance, not a changelog.
+
+If the comment cannot be posted, say so and carry on. A failed sync must never lose the artifact
+you just wrote or block the handoff.
+
+## 6. Hand off
 
 Print what changed and whether the PRD is approved. If approved and a TDD exists, suggest
 `/spec:iterate-tdd <TICKET-ID>`. If approved and no TDD exists, suggest `/spec:create-tdd <TICKET-ID>`.

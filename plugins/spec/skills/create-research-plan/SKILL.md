@@ -5,7 +5,7 @@ argument-hint: [TICKET-ID]
 disable-model-invocation: true
 disallowed-tools: Edit, NotebookEdit
 effort: high
-allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Write
+allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Write
 ---
 
 # Write research questions
@@ -82,7 +82,28 @@ Good questions are:
 Typically five to twelve questions. If you have more than fifteen, the ticket is probably too broad
 and you should say so.
 
-## 5. Hand off
+## 5. Sync the artifact list to Linear
+
+Generate the comment body, do not compose it yourself:
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs <TICKET-ID>
+```
+
+Then post it as **one comment, kept current**:
+
+1. `list_comments` on the issue and find the comment whose body contains `<!-- spec:artifacts -->`.
+2. If it exists, call `save_comment` with that comment's `id` to replace its body.
+3. If not, call `save_comment` with `issueId` to create it.
+
+Never add a new comment per phase. A ticket that accumulates one comment per phase becomes
+unreadable, which is the opposite of the point: anyone opening the issue should see the current
+artifacts at a glance, not a changelog.
+
+If the comment cannot be posted, say so and carry on. A failed sync must never lose the artifact
+you just wrote or block the handoff.
+
+## 6. Hand off
 
 Set the Linear issue to `questions-in-review`.
 

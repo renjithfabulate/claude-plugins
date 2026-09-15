@@ -5,7 +5,7 @@ argument-hint: [TICKET-ID] [what to change]
 disable-model-invocation: true
 disallowed-tools: NotebookEdit
 effort: high
-allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Edit
+allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Edit
 ---
 
 # Revise the research questions
@@ -46,7 +46,28 @@ When revising, watch for the failure modes that usually trigger this command:
 If the feedback contains a factual claim about the codebase, check it against the code before acting
 on it. The user may be misremembering, and it is cheaper to find that out now.
 
-## 4. Hand off
+## 4. Sync the artifact list to Linear
+
+Generate the comment body, do not compose it yourself:
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs <TICKET-ID>
+```
+
+Then post it as **one comment, kept current**:
+
+1. `list_comments` on the issue and find the comment whose body contains `<!-- spec:artifacts -->`.
+2. If it exists, call `save_comment` with that comment's `id` to replace its body.
+3. If not, call `save_comment` with `issueId` to create it.
+
+Never add a new comment per phase. A ticket that accumulates one comment per phase becomes
+unreadable, which is the opposite of the point: anyone opening the issue should see the current
+artifacts at a glance, not a changelog.
+
+If the comment cannot be posted, say so and carry on. A failed sync must never lose the artifact
+you just wrote or block the handoff.
+
+## 5. Hand off
 
 Print what changed, in a couple of lines, and the next step:
 

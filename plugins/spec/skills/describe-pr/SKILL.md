@@ -60,7 +60,14 @@ not. Check which you have rather than assuming.
 
 ### Route A: the GitHub MCP server
 
-If `mcp__plugin_spec_github__*` tools are available, use them:
+The plugin does **not** bundle a GitHub MCP server. GitHub's remote server
+(`https://api.githubcopilot.com/mcp/`) cannot be bundled as a bare URL, because its auth server does
+not support dynamic client registration, which Claude Code requires for OAuth. Adding it would show
+every user a failed connection. Making it work needs a personal access token in an `Authorization`
+header, which is the same token class as the `gh` CLI's, so it buys nothing over Route B.
+
+If the user has configured a GitHub MCP server themselves, at user or project level, prefer it. Look
+for tools matching `mcp__*github*__*` and use them:
 
 - `pull_request_read` to find the branch's existing PR
 - `create_pull_request` to open one

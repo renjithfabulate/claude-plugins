@@ -143,8 +143,10 @@ states. Claude Code prompts for it at install and stores it per user. It is neve
 
 ### GitHub
 
-The plugin bundles GitHub's official remote MCP server (`https://api.githubcopilot.com/mcp/`)
-alongside Linear. Authorise it once with `/mcp`, the same way.
+Pull request work goes through the `gh` CLI. GitHub's remote MCP server is deliberately **not**
+bundled: its auth server does not support dynamic client registration, so Claude Code cannot complete
+OAuth against a bare URL, and it fails to connect. Configuring it needs a personal access token in an
+Authorization header, which is the same token class `gh` already uses.
 
 `describe-pr` prefers it and falls back to the `gh` CLI when it is absent or unauthenticated, so
 skipping the OAuth prompt costs you nothing. It is worth authorising anyway: OAuth covers what you

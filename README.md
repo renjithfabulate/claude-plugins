@@ -2,11 +2,12 @@
 
 A Claude Code plugin marketplace.
 
-## rpi
+## spec
 
-Research-Plan-Implement. Spec-driven development where each phase produces a reviewable artifact
-before the next phase can start, and a human owns every forward handoff. Linear issue status stays
-in sync automatically as work moves through the phases.
+Spec-driven development on the Research-Plan-Implement model: each phase produces a reviewable
+artifact before the next phase can start, and a human owns every forward handoff. Works with or
+without an issue tracker; when a task is a Linear ticket, its status and artifact list stay in sync
+automatically.
 
 The premise: coding agents write code faster than anyone can review it, so the bottleneck moves from
 writing to reviewing. Putting the decisions in a short document, before a large diff exists, is the
@@ -47,7 +48,7 @@ Start here:
 
 | Command | Does |
 |---|---|
-| `/spec:start-task` | Pull a Linear ticket into a task directory and choose the workflow |
+| `/spec:start-task` | Open a task from a Linear ticket or a local slug, and choose the workflow |
 | `/spec:stages` | Inspect and manage the RPI workflow states on a Linear team |
 | `/spec:configure-workspace` | Write the per-repo `.spec/config.json` |
 
@@ -82,7 +83,7 @@ you for the description instead of fetching one.
 
 ### Artifacts
 
-Numbered Markdown in `<artifactDir>/<TICKET-ID>/`, committed alongside the code:
+Numbered Markdown in `<artifactDir>/<TASK-ID>/`, committed alongside the code:
 
 ```
 .thoughts/ENG-123/
@@ -165,7 +166,10 @@ All fields optional. Commit it: it holds no secrets.
 - **No phase-scoped write guard.** `disallowed-tools: Edit` stops source edits during read-only
   phases, but a path-scoped `Write` guard would be stricter. That needs the skill-frontmatter
   `hooks` schema, also not currently documented.
-- **No Slack notifications** and no hosted artifact commenting.
+- **No Slack notifications.** HumanLayer posts to a channel on artifact events; there is no
+  equivalent here. A `Stop` hook calling a webhook would cover it.
+- **No hosted artifact commenting.** Artifacts are files in your repo, so review happens in the PR.
+  `/spec:review-artifact-comments` reads Linear issue comments and PR review comments instead.
 
 ## Development
 

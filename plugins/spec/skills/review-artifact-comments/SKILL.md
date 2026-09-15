@@ -36,7 +36,9 @@ node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs <TICKET-ID>
 ## 2. Gather
 
 - Linear issue comments, via the Linear MCP `list_comments` tool
-- PR review comments:
+- PR review comments, by whichever route is available:
+  - **GitHub MCP** (preferred when connected): `pull_request_read` with `get_review_comments`
+  - **`gh` CLI** otherwise:
 
 ```bash
 gh pr view --json number,url,reviews,comments

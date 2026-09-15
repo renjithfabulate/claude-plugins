@@ -49,18 +49,42 @@ git status --short
 
 - **Changes that clearly belong to this task**: commit them.
 - **Anything whose ownership is unclear**: ask. Do not sweep an unrelated edit into someone's PR.
-- Push the branch, setting upstream if needed.
+- Push the branch with **git**, setting upstream if needed. The GitHub MCP server cannot create or
+  push git commits: its file-level `push_files` is not the same thing, and must not be used to fake
+  a push. If git cannot push, stop and report it.
 
 ## 3. Find or create the PR
+
+Two routes. **Prefer the bundled GitHub MCP when it is connected**, and fall back to `gh` when it is
+not. Check which you have rather than assuming.
+
+### Route A: the GitHub MCP server
+
+If `mcp__plugin_spec_github__*` tools are available, use them:
+
+- `pull_request_read` to find the branch's existing PR
+- `create_pull_request` to open one
+- `update_pull_request` to edit the body of an existing one
+
+It authenticates by OAuth, which is a different path from the `gh` CLI's token. That matters: a
+fine-grained personal access token scoped to selected repositories will 404 on a repo it was not
+granted, while the OAuth grant covers what the user can actually see.
+
+### Route B: the `gh` CLI
+
+If the MCP server is absent or unauthenticated:
 
 ```bash
 gh pr view --json number,url,state,title 2>/dev/null || echo "none"
 ```
 
-If one exists, update it. If not, create it against the base branch.
+If `gh` reports "not found" for a repo you can open in a browser, suspect token scope rather than a
+missing repo, and say so instead of concluding the PR cannot be made.
 
-**Creating or updating a PR publishes to GitHub, where teammates and CI will see it.** Show the
-title and body and get explicit confirmation before the call that creates or edits it.
+### Either way
+
+**Creating or updating a PR publishes to GitHub, where teammates and CI will see it.** Show the title
+and body and get explicit confirmation before the call that creates or edits it.
 
 If you cannot safely tell which PR to update, or which base to target, ask rather than guessing.
 
@@ -137,6 +161,14 @@ artifacts at a glance, not a changelog.
 
 If the comment cannot be posted, say so and carry on. A failed sync must never lose the artifact
 you just wrote or block the handoff.
+
+## 7b. Report CI if you can see it
+
+With the GitHub MCP connected, `pull_request_read` with `get_check_runs` returns check status
+without polling. Report failing checks by name.
+
+Do not wait for CI to finish and do not re-run it. Say what it reports now and hand back: a command
+that sits watching a pipeline has stopped being a handoff.
 
 ## 8. Finish
 

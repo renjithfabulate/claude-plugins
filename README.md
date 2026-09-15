@@ -141,6 +141,19 @@ branch would only 404. Run `/spec:stages ensure <TEAM>` to create the 18 states 
 A Linear API key is needed **only** by `/spec:stages`, because Linear's MCP is read-only for workflow
 states. Claude Code prompts for it at install and stores it per user. It is never committed.
 
+### GitHub
+
+The plugin bundles GitHub's official remote MCP server (`https://api.githubcopilot.com/mcp/`)
+alongside Linear. Authorise it once with `/mcp`, the same way.
+
+`describe-pr` prefers it and falls back to the `gh` CLI when it is absent or unauthenticated, so
+skipping the OAuth prompt costs you nothing. It is worth authorising anyway: OAuth covers what you
+can actually see, whereas a fine-grained personal access token scoped to selected repositories
+returns 404 on any repo it was not granted, which looks exactly like a missing repository.
+
+**The push is still git.** The MCP server cannot create or push git commits, so `describe-pr` pushes
+the branch with git and uses MCP only to open, update and read the pull request.
+
 ### Per-repo configuration
 
 The plugin ships no project-specific values. Put those in `.spec/config.json` in each repo:

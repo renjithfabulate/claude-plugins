@@ -68,24 +68,21 @@ Also:
 - **Name real files.** Paths from the codebase, not invented ones.
 - **Every phase states its checks.** The command that proves it: a test, a build, a curl, a query.
 
-## 3b. Check the phases are buildable here
+## 3b. Confirm the phases introduced nothing new
 
-Once the phases are cut, look at what they actually require: libraries, CLIs, generators, external
-services. Then:
+The full capability check already ran at the end of research. This is the narrow follow-up: the
+design may have introduced tooling the research never mentioned, such as a code generator, a
+migration CLI or a new service.
+
+Only if a phase names something the research did not:
 
 ```
 node ${CLAUDE_PLUGIN_ROOT}/scripts/capabilities.mjs
 ```
 
-If a phase depends on something this machine has no skill for, or on an MCP server that is not
-connected, **say so in the handoff** and point at `/spec:check-capabilities <TASK-ID>`.
-
-Do not fetch documentation or write a skill from here. That is deliberate: this command's job is the
-outline, and an agent that quietly goes and authors a skill mid-outline has both widened its remit
-and pulled untrusted web content into the repo without anyone deciding to.
-
-An MCP server showing **needs authentication** is not available. Treat it as missing, because only
-the user can authorise it.
+Report anything missing in the handoff and point at `/spec:check-capabilities <TASK-ID>`. Do not
+fetch documentation, author a skill or choose an MCP server from here: that would widen this
+command's remit and pull untrusted content into the repo without anyone deciding to.
 
 ## 4. Write the artifact
 

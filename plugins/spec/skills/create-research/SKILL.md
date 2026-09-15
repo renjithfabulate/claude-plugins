@@ -5,7 +5,7 @@ argument-hint: [TASK-ID]
 disable-model-invocation: true
 disallowed-tools: Edit, NotebookEdit
 effort: high
-allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Read, Grep, Glob, Write, Task
+allowed-tools: Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/artifact-manifest.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/task-ctx.mjs *), Bash(node ${CLAUDE_PLUGIN_ROOT}/scripts/capabilities.mjs *), Read, Grep, Glob, Write, Task
 ---
 
 # Research the current state
@@ -101,7 +101,31 @@ user's decision, which is the whole point of the phase split.
 Every claim carries a citation. A claim you cannot cite either gets verified or moves to Open
 questions.
 
-## 6. Sync the artifact list to Linear
+## 6. Check this machine can build it
+
+Research has just established what the system actually uses, so this is the first point with facts
+rather than guesses, and the **last point where a missing capability can still shape the design**
+instead of invalidating it.
+
+```
+node ${CLAUDE_PLUGIN_ROOT}/scripts/capabilities.mjs
+```
+
+Compare what the findings say the work touches against what is installed. Two kinds of gap, and they
+matter differently:
+
+- **A missing skill** degrades quality. Implementation will be slower and less idiomatic. Worth
+  flagging, rarely worth stopping for.
+- **A missing MCP server** can make an approach outright impossible. This is the one that must
+  surface now. A server listed as *needs authentication* counts as missing, because only the user can
+  authorise it.
+
+Report gaps in the handoff, and say plainly if one of them rules an approach out. **Do not choose an
+MCP server, install anything, or fetch documentation here.** That belongs to
+`/spec:check-capabilities <TASK-ID>`, where the user picks. Research records the state of things; it
+does not go and change it.
+
+## 7. Sync the artifact list to Linear
 
 Generate the comment body, do not compose it yourself:
 
@@ -122,7 +146,7 @@ artifacts at a glance, not a changelog.
 If the comment cannot be posted, say so and carry on. A failed sync must never lose the artifact
 you just wrote or block the handoff.
 
-## 7. Hand off
+## 8. Hand off
 
 Set the Linear issue to `research-in-review`.
 

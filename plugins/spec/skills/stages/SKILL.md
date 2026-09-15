@@ -62,5 +62,5 @@ canceled), `color` as `#RRGGBB`, and optionally `description` and `position`.
 
 The script prints the three places it looks. Relay that to the user and stop. Never ask them to
 paste the key into the conversation, and never write it into a file in the repo. The supported
-routes are the `/plugin configure spec@rvs-plugins` prompt, a `LINEAR_API_KEY` environment variable,
+routes are the `/plugin configure spec@rpi-plugin` prompt, a `LINEAR_API_KEY` environment variable,
 or `~/.config/rpi/linear.env`.

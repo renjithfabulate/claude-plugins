@@ -57,7 +57,7 @@ function resolveKey() {
     'No Linear API key found. Stage changes need one (issue status updates do not).\n' +
     'Provide it in any one of these, in priority order:\n' +
     '  1. LINEAR_API_KEY in the environment\n' +
-    '  2. /plugin configure spec@rvs-plugins   (stored per user, never committed)\n' +
+    '  2. /plugin configure spec@rpi-plugin   (stored per user, never committed)\n' +
     '  3. ~/.config/spec/linear.env  containing  LINEAR_API_KEY=lin_api_...\n' +
     '     (~/.config/rpi/linear.env is still read, from before the plugin was renamed)\n' +
     'Create a key at Linear > Settings > Security & access > Personal API keys.'

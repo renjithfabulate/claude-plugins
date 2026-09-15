@@ -1,6 +1,7 @@
-# rvs-plugins
+# rpi-plugin
 
-A Claude Code plugin marketplace.
+A Claude Code plugin marketplace. The name refers to the RPI methodology
+(Research-Plan-Implement) that the `spec` plugin implements.
 
 ## spec
 
@@ -17,7 +18,7 @@ only place a wrong direction gets caught cheaply.
 
 ```bash
 /plugin marketplace add renjithfabulate/claude-plugins
-/plugin install spec@rvs-plugins
+/plugin install spec@rpi-plugin
 ```
 
 Or pin it in a repo's `.claude/settings.json` so it registers for anyone who trusts that repo:
@@ -25,9 +26,9 @@ Or pin it in a repo's `.claude/settings.json` so it registers for anyone who tru
 ```json
 {
   "extraKnownMarketplaces": {
-    "rvs-plugins": { "source": { "source": "github", "repo": "renjithfabulate/claude-plugins" } }
+    "rpi-plugin": { "source": { "source": "github", "repo": "renjithfabulate/claude-plugins" } }
   },
-  "enabledPlugins": { "spec@rvs-plugins": true }
+  "enabledPlugins": { "spec@rpi-plugin": true }
 }
 ```
 

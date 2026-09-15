@@ -66,6 +66,26 @@ question falls on, ask.
 
 An ambiguous answer is not an answer. "That sounds fine" on a two-option question means ask again.
 
+## 4b. Draw the difference
+
+Before writing, ask whether a picture would settle anything. Read ${CLAUDE_PLUGIN_ROOT}/references/diagrams.md for
+when a diagram earns its place and which type fits which question.
+
+In a design discussion exactly two diagrams usually pay for themselves:
+
+- **Current state against desired state**, so the change is visible rather than described.
+- **The difference between the options**, for whichever decision the reader will find hardest.
+
+Draw the **delta**, not two unrelated pictures. Two labelled boxes side by side, one per option, is a
+restated option list: show the one edge each option adds or removes, so the reader can point at what
+they are choosing between.
+
+Use a ```mermaid fence inline in the artifact, never a separate file. It renders in GitHub review
+where the reader actually is, diffs as text, and cannot drift from the prose beside it.
+
+If a sentence says it faster, write the sentence. A diagram that restates the headings is upkeep with
+no reader.
+
 ## 5. Write the artifact
 
 Write `<task dir>/<NN>-design-discussion-<slug>.md`:
@@ -83,6 +103,10 @@ created: <DD/MM/YYYY>
 ## Current state
 What exists today, drawn from the research, only the parts this change touches.
 
+```mermaid
+%% only if it shows a mechanism the prose cannot
+```
+
 ## Desired state
 What should be true when this is done, in behavioural terms.
 
@@ -92,6 +116,10 @@ What should be true when this is done, in behavioural terms.
 **Options**
 - **A. <name>:** <what it means, what it costs>
 - **B. <name>:** <what it means, what it costs>
+
+```mermaid
+%% the difference between the options, where the choice is hard
+```
 
 **Recommendation:** <which, and why, in one line>
 **Status:** Decided, B, because <the user's reason> | **Open**

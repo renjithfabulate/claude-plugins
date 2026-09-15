@@ -60,7 +60,8 @@ what the code does defeats the point of having one.
 ## 5. Apply it
 
 Edit **in place**, keeping filename and frontmatter. Update any affected
-`diagram-<description>.html` alongside the prose.
+mermaid diagram alongside the prose it explains. A diagram that contradicts the text beside it is
+worse than no diagram, because a reader will believe the picture.
 
 ## 6. Sync the artifact list to Linear
 

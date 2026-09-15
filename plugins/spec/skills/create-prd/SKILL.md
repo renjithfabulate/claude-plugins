@@ -52,9 +52,17 @@ half-considered answers, and this document is the one that decides what gets bui
    possible, or an event that stops happening. "Users are happier" is not a measure.
 3. **The solution.** What the user experiences when this ships. Behaviour, not implementation.
 
-For anything visual, write `<task dir>/mockup-<description>.html` as a self-contained HTML file and
-ask the user to look at it. A picture settles a layout argument in one round trip where prose takes
-four.
+Two different visual tools, and picking the wrong one wastes the round trip. See
+${CLAUDE_PLUGIN_ROOT}/references/diagrams.md.
+
+**For the user's path through the change**, draw a ```mermaid `flowchart` or `stateDiagram-v2`
+inline in the PRD. Behaviour only: no services, no tables, no function names. A flow diagram in the
+document renders in GitHub review and cannot drift from the prose beside it.
+
+**For layout, hierarchy or visual treatment**, Mermaid cannot help. Write
+`<task dir>/mockup-<description>.html` as a self-contained file, one screen per file, and ask the
+user to look at it. A picture settles a layout argument in one round trip where prose takes four.
+Label it a mockup so nobody mistakes it for a spec.
 
 ## 4. Approval
 

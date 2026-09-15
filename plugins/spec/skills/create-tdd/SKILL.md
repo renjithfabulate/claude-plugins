@@ -56,8 +56,13 @@ This layer is worth its own review because real problems are visible here and no
 missing index, an N+1 query, a queue with no dead-letter path. All of them are obvious from a schema
 plus its queries, and all of them are expensive to find after the code exists.
 
-For anything with more than two moving parts, write `<task dir>/diagram-<description>.html` as a
-self-contained HTML file and have the user look at it.
+**Draw this layer.** Diagrams pay for themselves here more than anywhere else in the workflow,
+because the problems they expose are invisible once the code exists: a `sequenceDiagram` shows an
+extra round trip, an `erDiagram` shows a missing index or an N+1, a `stateDiagram-v2` shows a state
+with no way out.
+
+Use a ```mermaid fence inline in the TDD, not a separate file, so it renders in review and diffs as
+text. See ${CLAUDE_PLUGIN_ROOT}/references/diagrams.md for which type answers which question.
 
 ### Layer 2: Program design
 
@@ -83,14 +88,20 @@ created: <DD/MM/YYYY>
 ## System design
 Components and how they interact. Contracts, schemas, stores, queues, queries.
 
-### Diagrams
-- [<description>](diagram-<description>.html)
+```mermaid
+%% contracts, stores, queues, and the queries against them
+```
 
 ### Approved
 <DD/MM/YYYY> by <who>.
 
 ## Program design
 Call paths, files, types, signatures, test boundaries.
+
+```mermaid
+%% sequenceDiagram for a call path, classDiagram for type relationships.
+%% Only where the shape is not obvious from the signatures already written down.
+```
 
 ### Approved
 <DD/MM/YYYY> by <who>.

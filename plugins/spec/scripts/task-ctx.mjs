@@ -7,7 +7,7 @@
 //   node task-ctx.mjs <TICKET-ID> [--repo <path>] [--json]
 
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
 // Most specific first: "research-questions" must win over "research".
@@ -25,6 +25,23 @@ const KINDS = [
 const PRECEDENCE = ['research', 'design-discussion', 'prd', 'tdd', 'structure-outline', 'plan'];
 
 const DEFAULTS = { artifactDir: 'thoughts', linearTeam: null, baseBranch: null, worktree: null };
+
+// Keep every derived path inside the repo. The ticket id is user input and artifactDir
+// comes from a committed config file, so either could otherwise redirect writes outside
+// the repository with ../ segments.
+function contain(root, ...segments) {
+  const base = resolve(root);
+  const target = resolve(base, ...segments);
+  if (target !== base && !target.startsWith(base + sep)) {
+    console.error(
+      `error: refusing a path that escapes the repository.\n` +
+      `  repo:    ${base}\n  resolved: ${target}\n` +
+      'Check the ticket id and artifactDir in your config for ".." segments.'
+    );
+    process.exit(1);
+  }
+  return target;
+}
 
 function git(args, cwd) {
   try {
@@ -51,7 +68,7 @@ function loadConfig(root) {
   // '.spec' is current; '.rpi' predates the rename and is still read so existing
   // repos keep working without being touched.
   const path = ['.spec', '.rpi']
-    .map((d) => join(root, d, 'config.json'))
+    .map((d) => contain(root, d, 'config.json'))
     .find((p) => existsSync(p));
   if (!path) return { ...DEFAULTS, _source: null };
   try {
@@ -93,9 +110,14 @@ if (!ticket) {
   process.exit(1);
 }
 
+if (ticket.includes('/') || ticket.includes('\\') || ticket.split(/[\\/]/).includes('..') || ticket === '..') {
+  console.error(`error: "${ticket}" is not a valid ticket id. It must not contain path separators or "..".`);
+  process.exit(1);
+}
+
 const root = repoRoot(flag('repo') || process.cwd());
 const cfg = loadConfig(root);
-const taskDir = join(root, cfg.artifactDir, ticket);
+const taskDir = contain(root, cfg.artifactDir, ticket);
 const artifacts = scan(taskDir);
 const nextNum = String((artifacts.at(-1)?.num ?? 0) + 1).padStart(2, '0');
 
